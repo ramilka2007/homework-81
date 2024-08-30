@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {LinkForm} from "../../types.ts";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {selectLink} from "./homeSlice.ts";
+import {selectLink, selectLoading} from "./homeSlice.ts";
 import {makeFromOriginalToShort} from "./homeThunk.ts";
+import Spinner from "../../UI/Spinner/Spinner.tsx";
 
 const Home = () => {
     const dispatch = useAppDispatch();
     const link = useAppSelector(selectLink);
+    const loading = useAppSelector(selectLoading);
 
     const [form, setForm] = useState<LinkForm>({
         originalUrl: '',
@@ -44,9 +46,13 @@ const Home = () => {
                     </button>
                 </form>
 
-                {link === null ? null :
+                {loading ? <Spinner/> :
                     <>
-                        <a href={link.originalUrl} target="_blank">http://localhost:8000/{link.shortUrl}</a>
+                        {link === null ? null :
+                            <>
+                                <a href={link.originalUrl} target="_blank">http://localhost:8000/{link.shortUrl}</a>
+                            </>
+                        }
                     </>
                 }
             </div>

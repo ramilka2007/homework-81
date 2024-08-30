@@ -35,11 +35,12 @@ const homeSlice = createSlice({
         });
     },
     selectors: {
-        selectLink: (state) => state.link
+        selectLink: (state) => state.link,
+        selectLoading: (state) => state.isLoading
     }
 });
 
 
 export const homeReducer = homeSlice.reducer;
 
-export const {selectLink} = homeSlice.selectors;
+export const {selectLink, selectLoading} = homeSlice.selectors;
