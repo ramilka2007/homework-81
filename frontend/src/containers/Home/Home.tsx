@@ -1,8 +1,14 @@
 import React, {useState} from 'react';
-import {Link} from "../../types.ts";
+import {LinkForm} from "../../types.ts";
+import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
+import {selectLink} from "./homeSlice.ts";
+import {makeFromOriginalToShort} from "./homeThunk.ts";
 
 const Home = () => {
-    const [form, setForm] = useState<Link>({
+    const dispatch = useAppDispatch();
+    const link = useAppSelector(selectLink);
+
+    const [form, setForm] = useState<LinkForm>({
         originalUrl: '',
     });
 
@@ -15,6 +21,7 @@ const Home = () => {
 
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
+        await dispatch(makeFromOriginalToShort(form));
     };
     return (
         <div className="container">
@@ -35,8 +42,13 @@ const Home = () => {
                     <button disabled={form.originalUrl === ''} type="submit"
                             className="btn btn-primary">Shorten!
                     </button>
-
                 </form>
+
+                {link === null ? null :
+                    <>
+                        <a href={link.originalUrl} target="_blank">http://localhost:8000/{link.shortUrl}</a>
+                    </>
+                }
             </div>
         </div>
     );
